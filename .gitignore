@@ -1,3 +1,5 @@
 image/
 config.ini
 .
+.*pycache
+.idea
