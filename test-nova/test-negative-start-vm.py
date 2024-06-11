@@ -1,7 +1,5 @@
-import time
-
 import pytest
-from base import get_token, get_server_info, shutdown_server, get_server_status, startup_server
+from base import get_token, get_server_info, startup_server
 import configparser
 
 config = configparser.ConfigParser()
