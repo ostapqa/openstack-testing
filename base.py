@@ -69,7 +69,7 @@ def get_server_status(token, server_id):
         raise Exception(f"Failed to get server status. Status code: {response.status_code}, Response: {response.text}")
 
 
-def create_server(token, server_name, image_id, flavor_id, network_id):
+def create_server(token, server_name, image_id, flavor_id, network_id, positive=True):
     headers = {
         "X-Auth-Token": token,
         "Content-Type": "application/json"
@@ -84,8 +84,11 @@ def create_server(token, server_name, image_id, flavor_id, network_id):
             ]
         }
     }
-
     response = requests.post(nova_url, json=payload, headers=headers)
+
+    if not positive:
+        return response
+
     if response.status_code == 202:
         server_info = response.json()["server"]
         server_id = server_info["id"]
