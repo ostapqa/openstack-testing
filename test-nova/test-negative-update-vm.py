@@ -8,10 +8,10 @@ config.read("/home/ostap/PycharmProjects/openstack-testing/config.ini")
 server_name = config.get('compute', 'server_name')
 
 
-def test_update_server_properties():
+def test_negative_update_server_properties():
     try:
         token = get_token()
-        new_server_name = "updated-test-server1"
+        new_server_name = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
         server_info = get_server_info(server_name, token).json()
         server_id = server_info["server"]["id"]
@@ -21,7 +21,7 @@ def test_update_server_properties():
         }
         updated_server_info = update_server_properties(token, server_id, new_properties)
 
-        assert updated_server_info.status_code == 200
+        assert updated_server_info.status_code == 400
 
         print(f"Server properties updated successfully: {updated_server_info}")
     except Exception as e:
