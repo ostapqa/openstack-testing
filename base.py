@@ -191,3 +191,16 @@ def shutdown_server(token, server_id):
     }
     response = requests.post(url, json=payload, headers=headers, verify=False)
     return response
+
+
+def startup_server(token, server_id):
+    url = f"{nova_url}/{server_id}/action"
+    headers = {
+        "X-Auth-Token": token,
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "os-start": None
+    }
+    response = requests.post(url, json=payload, headers=headers, verify=False)
+    return response
