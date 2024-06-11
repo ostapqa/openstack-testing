@@ -159,8 +159,6 @@ def get_server_info(server_name, token):
         "X-Auth-Token": token,
         "Accept": "application/json"
     }
-
-    print(url, headers)
     response = requests.get(url, headers=headers, verify=False)
     return response
 
@@ -175,7 +173,5 @@ def update_server_properties(token, server_id, new_properties):
         "server": new_properties
     }
     response = requests.put(url, json=payload, headers=headers)
-    if response.status_code == 200:
-        return True
-    else:
-        raise Exception(f"Failed to update server properties. Status code: {response.status_code}, Response: {response.text}")
+
+    return response
