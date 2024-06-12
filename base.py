@@ -270,3 +270,13 @@ def delete_image(token, image_id):
     }
     response = requests.delete(url, headers=headers, verify=False)
     return response
+
+
+def list_images(token):
+    url = f"{glance_url}/images"
+    headers = {
+        "X-Auth-Token": token,
+        "Accept": "application/json"
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    return response
