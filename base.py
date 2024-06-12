@@ -214,8 +214,35 @@ def reboot_server(token, server_id):
     }
     payload = {
         "reboot": {
-            "type": "SOFT"  # Используйте "HARD" для жесткой перезагрузки, если необходимо
+            "type": "SOFT"
         }
     }
     response = requests.post(url, json=payload, headers=headers, verify=False)
     return response
+
+
+def get_image_info(image_id, token):
+    url = f"{glance_url}/images/{image_id}"
+    headers = {
+        "X-Auth-Token": token,
+        "Accept": "application/json"
+    }
+    print(url, headers)
+    response = requests.get(url, headers=headers, verify=False)
+    print(response.json())
+    return response
+
+def get_image_id_by_name(image_name, token):
+    url = f"{glance_url}/v2/images"
+    headers = {
+        "X-Auth-Token": token,
+        "Accept": "application/json"
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    if response.status_code == 200:
+        images = response.json()["images"]
+        for image in images:
+            if image["name"] == image_name:
+                return image["id"]
+    raise Exception(f"No image found with name: {image_name}")
+
