@@ -58,6 +58,7 @@ def get_token():
         raise Exception(f"Failed to get token: {response.status_code}, {response.text}")
 
 
+# nova
 def get_server_status(token, server_id):
     headers = {
         "X-Auth-Token": token
@@ -220,7 +221,7 @@ def reboot_server(token, server_id):
     response = requests.post(url, json=payload, headers=headers, verify=False)
     return response
 
-
+# glance
 def get_image_info(image_id, token):
     url = f"{glance_url}/images/{image_id}"
     headers = {
@@ -259,4 +260,13 @@ def update_image_properties(token, image_id, new_properties):
 
     response = requests.patch(url, json=payload, headers=headers, verify=False)
 
+    return response
+
+
+def delete_image(token, image_id):
+    url = f"{glance_url}/images/{image_id}"
+    headers = {
+        "X-Auth-Token": token
+    }
+    response = requests.delete(url, headers=headers, verify=False)
     return response
