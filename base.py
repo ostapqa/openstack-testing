@@ -246,3 +246,17 @@ def get_image_id_by_name(image_name, token):
                 return image["id"]
     raise Exception(f"No image found with name: {image_name}")
 
+
+def update_image_properties(token, image_id, new_properties):
+    url = f"{glance_url}/images/{image_id}"
+    headers = {
+        "X-Auth-Token": token,
+        "Content-Type": "application/openstack-images-v2.1-json-patch"
+    }
+    payload = [{"op": "replace", "path": f"/{key}", "value": value} for key, value in new_properties.items()]
+
+    print(url, payload, headers)
+
+    response = requests.patch(url, json=payload, headers=headers, verify=False)
+
+    return response
