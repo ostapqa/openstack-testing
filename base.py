@@ -18,7 +18,7 @@ user_domain_name = config.get('openstack', 'user_domain_name')
 project_domain_id = config.get('openstack', 'project_domain_id')
 
 nova_url = config.get('compute', 'nova_url')
-
+cinder_url = config.get('compute', 'cinder_url')
 
 def get_token():
     url = f"{auth_url}/auth/tokens"
@@ -279,4 +279,24 @@ def list_images(token):
         "Accept": "application/json"
     }
     response = requests.get(url, headers=headers, verify=False)
+    return response
+
+
+# cinder
+def create_volume(token, name, size, description=None):
+    url = f"{cinder_url}/{project_id}/volumes"
+    headers = {
+        "X-Auth-Token": token,
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "volume": {
+            "name": name,
+            "size": size
+        }
+    }
+    if description:
+        payload["volume"]["description"] = description
+
+    response = requests.post(url, json=payload, headers=headers, verify=False)
     return response
