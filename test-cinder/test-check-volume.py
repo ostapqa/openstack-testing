@@ -1,5 +1,5 @@
 import pytest
-from base import get_volume_info, create_volume, get_token
+from base import get_volume_info, create_volume, get_token, delete_volume
 
 
 def test_get_volume_info():
@@ -20,7 +20,7 @@ def test_get_volume_info():
         assert volume_info.get("id") == volume_id
         assert volume_info.get("name") == volume_name
 
-        print(f"Volume info retrieved successfully: {volume_info}")
+        delete_volume(token, volume_id)
 
     except Exception as e:
         pytest.fail(f"Test failed: {e}")
