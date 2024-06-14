@@ -309,3 +309,13 @@ def get_volume_info(token, volume_id):
     }
     response = requests.get(url, headers=headers, verify=False)
     return response
+
+
+def delete_volume(token, volume_id):
+    url = f"{cinder_url}/{project_id}/volumes/{volume_id}"
+    headers = {
+        "X-Auth-Token": token,
+        "Content-Type": "application/json"
+    }
+    response = requests.delete(url, headers=headers, verify=False)
+    return response
