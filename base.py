@@ -69,7 +69,6 @@ def get_server_status(token, server_id):
     else:
         raise Exception(f"Failed to get server status. Status code: {response.status_code}, Response: {response.text}")
 
-
 def create_server(token, server_name, image_id, flavor_id, network_id, positive=True):
     headers = {
         "X-Auth-Token": token,
@@ -299,4 +298,14 @@ def create_volume(token, name, size, description=None):
         payload["volume"]["description"] = description
 
     response = requests.post(url, json=payload, headers=headers, verify=False)
+    return response
+
+
+def get_volume_info(token, volume_id):
+    url = f"{cinder_url}/{project_id}/volumes/{volume_id}"
+    headers = {
+        "X-Auth-Token": token,
+        "Accept": "application/json"
+    }
+    response = requests.get(url, headers=headers, verify=False)
     return response
