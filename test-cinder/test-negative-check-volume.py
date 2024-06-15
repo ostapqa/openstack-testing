@@ -1,5 +1,5 @@
 import pytest
-from base import get_volume_info, create_volume, get_token, delete_volume
+from base import get_volume_info, get_token
 
 
 def test_get_volume_info():
