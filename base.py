@@ -319,3 +319,18 @@ def delete_volume(token, volume_id):
     }
     response = requests.delete(url, headers=headers, verify=False)
     return response
+
+
+def update_volume(token, volume_id, new_name):
+    url = f"{cinder_url}/{project_id}/volumes/{volume_id}"
+    headers = {
+        "X-Auth-Token": token,
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "volume": {
+            "name": new_name
+        }
+    }
+    response = requests.put(url, json=payload, headers=headers, verify=False)
+    return response
