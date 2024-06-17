@@ -371,3 +371,5 @@ def delete_network(token, network_id):
         "X-Auth-Token": token
     }
     return requests.delete(url, headers=headers)
+
+
