@@ -70,10 +70,10 @@ def get_server_status(token, server_id):
     else:
         raise Exception(f"Failed to get server status. Status code: {response.status_code}, Response: {response.text}")
 
-def create_server(token, server_name, image_id, flavor_id, network_id, positive=True):
+def create_server(token, server_name, image_id, flavor_id, network_id):
     headers = {
-        "X-Auth-Token": token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "X-Auth-Token": token
     }
     payload = {
         "server": {
@@ -82,40 +82,23 @@ def create_server(token, server_name, image_id, flavor_id, network_id, positive=
             "flavorRef": flavor_id,
             "networks": [
                 {"uuid": network_id}
-            ]
+                ]
+
         }
     }
     response = requests.post(nova_url, json=payload, headers=headers)
 
-    if not positive:
-        return response
+    return response
 
-    if response.status_code == 202:
-        server_info = response.json()["server"]
-        server_id = server_info["id"]
 
-        timeout = 600
-        poll_interval = 10
-        start_time = time.time()
-
-        while time.time() - start_time < timeout:
-            status = get_server_status(token, server_id)
-            if status == "ACTIVE":
-                server_links = server_info["links"]
-                server_self_link = next(link["href"] for link in server_links if link["rel"] == "self")
-                server_bookmark_link = next(link["href"] for link in server_links if link["rel"] == "bookmark")
-                admin_pass = server_info.get("adminPass", None)
-                return {
-                    "id": server_id,
-                    "self_link": server_self_link,
-                    "bookmark_link": server_bookmark_link,
-                    "admin_pass": admin_pass
-                }
-            elif status == "ERROR":
-                raise Exception(f"Server creation failed with status: {status}")
-            time.sleep(poll_interval)
-
-        raise Exception("Timeout while waiting for server to become ACTIVE")
+def delete_server(token, server_id):
+    url = f"{nova_url}/{server_id}"
+    headers = {
+        "Content-Type": "application/json",
+        "X-Auth-Token": token
+    }
+    response = requests.delete(url, headers=headers)
+    return response
 
 
 def delete_server_by_name(server_name, token):
@@ -156,8 +139,7 @@ def get_server_id_by_name(server_name, token):
     return None
 
 
-def get_server_info(server_name, token):
-    server_id = get_server_id_by_name(server_name, token)
+def get_server_info(token, server_id):
     url = f"{nova_url}/{server_id}"
     headers = {
         "X-Auth-Token": token,
@@ -228,9 +210,7 @@ def get_image_info(image_id, token):
         "X-Auth-Token": token,
         "Accept": "application/json"
     }
-    print(url, headers)
     response = requests.get(url, headers=headers, verify=False)
-    print(response.json())
     return response
 
 def get_image_id_by_name(image_name, token):
@@ -255,8 +235,6 @@ def update_image_properties(token, image_id, new_properties):
         "Content-Type": "application/openstack-images-v2.1-json-patch"
     }
     payload = [{"op": "replace", "path": f"/{key}", "value": value} for key, value in new_properties.items()]
-
-    print(url, payload, headers)
 
     response = requests.patch(url, json=payload, headers=headers, verify=False)
 
