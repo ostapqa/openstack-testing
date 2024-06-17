@@ -1,3 +1,4 @@
+import allure
 import pytest
 import time
 
@@ -5,6 +6,8 @@ from base import (get_token, create_server, get_server_info, delete_server, imag
                   network_id)
 
 
+@allure.feature('Nova')
+@allure.story('Get server info')
 def test_get_server_info():
     try:
         token = get_token()

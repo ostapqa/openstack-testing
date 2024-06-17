@@ -1,3 +1,4 @@
+import allure
 import requests
 import configparser
 
@@ -11,17 +12,18 @@ password = config.get('openstack', 'password')
 domain_id = config.get('openstack', 'domain_id')
 project_id = config.get('openstack', 'project_id')
 project_name = config.get('openstack', 'project_name')
-flavor_id = config.get('compute', 'flavor')
-network_id = config.get('compute', 'network')
-image_id = config.get('compute', 'image')
 glance_url = config.get('openstack', 'glance_url')
 user_domain_name = config.get('openstack', 'user_domain_name')
 project_domain_id = config.get('openstack', 'project_domain_id')
 
+flavor_id = config.get('compute', 'flavor')
+network_id = config.get('compute', 'network')
+image_id = config.get('compute', 'image')
 nova_url = config.get('compute', 'nova_url')
 cinder_url = config.get('compute', 'cinder_url')
 neutron_url = config.get('compute', 'neutron_url')
 
+@allure.step('Get JWT-token')
 def get_token():
     url = f"{auth_url}/auth/tokens"
     headers = {
@@ -61,6 +63,7 @@ def get_token():
 
 
 # nova
+@allure.step('Get Server status')
 def get_server_status(token, server_id):
     headers = {
         "X-Auth-Token": token
@@ -71,6 +74,8 @@ def get_server_status(token, server_id):
     else:
         raise Exception(f"Failed to get server status. Status code: {response.status_code}, Response: {response.text}")
 
+
+@allure.step('Create server')
 def create_server(token, server_name, image_id, flavor_id, network_id):
     headers = {
         "Content-Type": "application/json",
@@ -88,10 +93,10 @@ def create_server(token, server_name, image_id, flavor_id, network_id):
         }
     }
     response = requests.post(nova_url, json=payload, headers=headers)
-
     return response
 
 
+@allure.step('Delete server')
 def delete_server(token, server_id):
     url = f"{nova_url}/{server_id}"
     headers = {
@@ -102,6 +107,7 @@ def delete_server(token, server_id):
     return response
 
 
+@allure.step('Delete server by name')
 def delete_server_by_name(server_name, token):
     headers = {
         "X-Auth-Token": token,
@@ -124,6 +130,7 @@ def delete_server_by_name(server_name, token):
         raise Exception(f"Failed to delete server. Status code: {response.status_code}, Response: {response.text}")
 
 
+@allure.step('Get server ID by name')
 def get_server_id_by_name(server_name, token):
     headers = {
         "Accept": "application/json",
@@ -140,6 +147,7 @@ def get_server_id_by_name(server_name, token):
     return None
 
 
+@allure.step('Get server info')
 def get_server_info(token, server_id):
     url = f"{nova_url}/{server_id}"
     headers = {
@@ -150,6 +158,7 @@ def get_server_info(token, server_id):
     return response
 
 
+@allure.step('Get update server properties')
 def update_server_properties(token, server_id, new_properties):
     url = f"{nova_url}/{server_id}"
     headers = {
@@ -163,7 +172,7 @@ def update_server_properties(token, server_id, new_properties):
 
     return response
 
-
+@allure.step('Shutdown server')
 def shutdown_server(token, server_id):
     url = f"{nova_url}/{server_id}/action"
     headers = {
@@ -177,6 +186,7 @@ def shutdown_server(token, server_id):
     return response
 
 
+@allure.step('Startup server')
 def startup_server(token, server_id):
     url = f"{nova_url}/{server_id}/action"
     headers = {
@@ -190,6 +200,7 @@ def startup_server(token, server_id):
     return response
 
 
+@allure.step('Reboot server')
 def reboot_server(token, server_id):
     url = f"{nova_url}/{server_id}/action"
     headers = {
@@ -205,6 +216,7 @@ def reboot_server(token, server_id):
     return response
 
 # glance
+@allure.step('Get image info')
 def get_image_info(image_id, token):
     url = f"{glance_url}/images/{image_id}"
     headers = {
@@ -214,6 +226,7 @@ def get_image_info(image_id, token):
     response = requests.get(url, headers=headers, verify=False)
     return response
 
+@allure.step('Get image ID by name')
 def get_image_id_by_name(image_name, token):
     url = f"{glance_url}/v2/images"
     headers = {
@@ -229,6 +242,7 @@ def get_image_id_by_name(image_name, token):
     raise Exception(f"No image found with name: {image_name}")
 
 
+@allure.step('Update image properties')
 def update_image_properties(token, image_id, new_properties):
     url = f"{glance_url}/images/{image_id}"
     headers = {
@@ -242,6 +256,7 @@ def update_image_properties(token, image_id, new_properties):
     return response
 
 
+@allure.step('Delete image')
 def delete_image(token, image_id):
     url = f"{glance_url}/images/{image_id}"
     headers = {
@@ -251,6 +266,7 @@ def delete_image(token, image_id):
     return response
 
 
+@allure.step('Retrieving images')
 def list_images(token):
     url = f"{glance_url}/images"
     headers = {
@@ -262,6 +278,7 @@ def list_images(token):
 
 
 # cinder
+@allure.step('Create volume')
 def create_volume(token, name, size, description=None):
     url = f"{cinder_url}/{project_id}/volumes"
     headers = {
@@ -281,6 +298,7 @@ def create_volume(token, name, size, description=None):
     return response
 
 
+@allure.step('Get volume info')
 def get_volume_info(token, volume_id):
     url = f"{cinder_url}/{project_id}/volumes/{volume_id}"
     headers = {
@@ -291,6 +309,7 @@ def get_volume_info(token, volume_id):
     return response
 
 
+@allure.step('Delete volume')
 def delete_volume(token, volume_id):
     url = f"{cinder_url}/{project_id}/volumes/{volume_id}"
     headers = {
@@ -301,6 +320,7 @@ def delete_volume(token, volume_id):
     return response
 
 
+@allure.step('Update volume')
 def update_volume(token, volume_id, new_name):
     url = f"{cinder_url}/{project_id}/volumes/{volume_id}"
     headers = {
@@ -317,6 +337,7 @@ def update_volume(token, volume_id, new_name):
 
 
 # neutron
+@allure.step('Create network')
 def create_network(token, network_name):
     url = f"{neutron_url}/networks"
     headers = {
@@ -334,6 +355,7 @@ def create_network(token, network_name):
     return response
 
 
+@allure.step('Get network info')
 def get_network_info(token, network_id):
     url = f"{neutron_url}/networks/{network_id}"
     headers = {
@@ -345,6 +367,7 @@ def get_network_info(token, network_id):
     return response
 
 
+@allure.step('Delete network')
 def delete_network(token, network_id):
     url = f"{neutron_url}/networks/{network_id}"
     headers = {
@@ -354,6 +377,7 @@ def delete_network(token, network_id):
     return requests.delete(url, headers=headers)
 
 
+@allure.step('Get network list')
 def get_network_list(token, negative=False):
     url = f"{neutron_url}/networks"
     headers = {
@@ -366,6 +390,7 @@ def get_network_list(token, negative=False):
     elif negative:
         return response
 
+@allure.step('Update network')
 def update_network(token, network_id, new_properties):
     url = f"{neutron_url}/networks/{network_id}"
     headers = {

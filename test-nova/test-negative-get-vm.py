@@ -1,7 +1,10 @@
+import allure
 from base import get_server_info, get_token
 import pytest
 
 
+@allure.feature('Nova')
+@allure.story('Negative get server')
 def test_get_server_invalid_info():
     try:
         token = get_token()

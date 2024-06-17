@@ -1,7 +1,9 @@
+import allure
 import pytest
 from base import get_token, list_images
 
-
+@allure.feature('Glance')
+@allure.story('List Images')
 def test_list_images():
     try:
         token = get_token()

@@ -1,6 +1,9 @@
+import allure
 import pytest
 from base import get_token, shutdown_server
 
+@allure.feature('Nova')
+@allure.story('Negative shutdown server')
 def test_negative_shutdown_server():
     try:
         token = get_token()

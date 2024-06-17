@@ -1,11 +1,13 @@
+import allure
 import time
-
 import pytest
 from base import (get_token, create_server, delete_server, image_id, flavor_id,
                   network_id, get_server_status, shutdown_server)
 
 
 
+@allure.feature('Nova')
+@allure.story('Shutdown a server')
 def test_shutdown_server():
     try:
         token = get_token()

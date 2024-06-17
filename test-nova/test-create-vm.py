@@ -1,9 +1,11 @@
 import time
-
+import allure
 import pytest
 from base import (get_token, create_server, get_server_info, delete_server, delete_network, image_id, flavor_id,
                   network_id)
 
+@allure.feature('Nova')
+@allure.story('Create server')
 def test_create_server():
     try:
         token = get_token()

@@ -1,7 +1,9 @@
+import allure
 import pytest
 from base import get_token, delete_image
 
-
+@allure.feature('Glance')
+@allure.story('Negative Test: Delete Image')
 def test_negative_delete_image():
     try:
         token = get_token()

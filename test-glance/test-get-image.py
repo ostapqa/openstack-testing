@@ -1,7 +1,10 @@
+import allure
 import pytest
 from base import get_token, get_image_info, image_id
 
 
+@allure.feature('Glance')
+@allure.story('Get Image Info')
 def test_get_image_info():
     try:
         token = get_token()
