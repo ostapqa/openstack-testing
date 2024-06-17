@@ -1,8 +1,7 @@
 import time
 
 import pytest
-from base import get_token, create_server, create_network, get_server_info, \
-    delete_server, delete_network
+from base import get_token, create_server, get_server_info, delete_server, delete_network
 import configparser
 
 config = configparser.ConfigParser()
@@ -15,15 +14,8 @@ def test_create_server():
         server_name = "test-server"
         image_id = config.get('compute', 'image')
         flavor_id = config.get('compute', 'flavor')
-        network_name = "test-network"
+        network_id = config.get('compute', 'network')
 
-        # ЧТО ТО С СЕТЬЮ
-        # network_response = create_network(token, network_name)
-        # assert network_response.status_code == 201
-        # network_id = network_response.json().get("network", {}).get("id")
-        # assert network_id is not None
-
-        network_id = "0b2280b3-74ef-4bb0-a72a-88fdfedb0e93"
         create_response = create_server(token, server_name, image_id, flavor_id, network_id)
         assert create_response.status_code == 202
         server_id = create_response.json().get("server", {}).get("id")
