@@ -1,21 +1,28 @@
 import time
 
 import pytest
-from base import get_server_info, get_token, reboot_server, get_server_status
+from base import delete_server, get_token, reboot_server, get_server_status, create_server
 import configparser
 
 config = configparser.ConfigParser()
 config.read("/home/ostap/PycharmProjects/openstack-testing/config.ini")
 
-server_name = config.get('compute', 'server_name')
-
 
 def test_reboot_server():
     try:
         token = get_token()
+        server_name = "test-server"
+        image_id = config.get('compute', 'image')
+        flavor_id = config.get('compute', 'flavor')
+        network_id = config.get('compute', 'network')
 
-        server_info = get_server_info(server_name, token)
-        server_id = server_info.json()["server"]["id"]
+        create_response = create_server(token, server_name, image_id, flavor_id, network_id)
+        assert create_response.status_code == 202
+        server_id = create_response.json().get("server", {}).get("id")
+        assert server_id is not None
+
+        time.sleep(10)
+
 
         reboot_response = reboot_server(token, server_id)
         assert reboot_response.status_code == 202
@@ -28,11 +35,13 @@ def test_reboot_server():
             status = get_server_status(token, server_id)
             if status == "ACTIVE":
                 print(f"Server {server_name} successfully rebooted.")
-                return
+                break
             elif status == "ERROR":
                 pytest.fail(f"Server {server_name} failed to reboot and is in ERROR state.")
-            time.sleep(poll_interval)
+                time.sleep(poll_interval)
 
-        pytest.fail(f"Server {server_name} did not reboot within the expected time.")
+
+        deleted_response = delete_server(token, server_id).status_code
+        assert deleted_response == 204
     except Exception as e:
         pytest.fail(f"Test failed: {e}")
