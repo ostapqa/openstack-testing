@@ -1,4 +1,3 @@
-import time
 import pytest
 
 from base import delete_volume, get_token
