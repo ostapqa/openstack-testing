@@ -1,7 +1,10 @@
+import allure
 import pytest
 from base import get_token, create_volume, delete_volume
 
 
+@allure.feature('Cinder')
+@allure.story('Create Volume')
 def test_create_volume():
     try:
         token = get_token()

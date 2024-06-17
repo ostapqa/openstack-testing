@@ -1,8 +1,11 @@
+import allure
 import pytest
 
 from base import get_network_list, get_token
 
 
+@allure.feature('Neutron')
+@allure.story('Get network list')
 def test_get_network_list():
     try:
         token = get_token()

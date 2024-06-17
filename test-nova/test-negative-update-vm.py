@@ -1,7 +1,10 @@
+import allure
 import pytest
 from base import (get_token, create_server, image_id, flavor_id,
                   network_id, update_server_properties)
 
+@allure.feature('Nova')
+@allure.story('Negative update server properties')
 def test_negative_update_server_properties():
     try:
         token = get_token()

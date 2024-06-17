@@ -1,6 +1,5 @@
-image/
 config.ini
-.
 .*pycache
 __pycache__
 .idea
+allure-results

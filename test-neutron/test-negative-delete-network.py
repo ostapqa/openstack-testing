@@ -1,7 +1,10 @@
+import allure
 import pytest
 from base import get_token, delete_network
 
 
+@allure.feature('Neutron')
+@allure.story('Create negative network')
 def test_delete_network():
     try:
         token = get_token()

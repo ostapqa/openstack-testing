@@ -1,7 +1,10 @@
+import allure
 import pytest
 from base import get_volume_info, get_token
 
 
+@allure.feature('Cinder')
+@allure.story('Negative test to get volume info')
 def test_get_volume_info():
     try:
         token = get_token()

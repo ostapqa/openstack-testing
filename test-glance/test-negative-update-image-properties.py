@@ -1,7 +1,9 @@
+import allure
 import pytest
 from base import get_token, update_image_properties, image_id
 
-
+@allure.feature('Glance')
+@allure.story('Negative Test: Update Image Properties')
 def test_update_image_properties():
     try:
         token = get_token()

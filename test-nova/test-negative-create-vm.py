@@ -1,7 +1,10 @@
+import allure
 import pytest
 from base import get_token, create_server
 
 
+@allure.feature('Nova')
+@allure.story('Negative create server')
 def test_create_server():
     try:
         token = get_token()

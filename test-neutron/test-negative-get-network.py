@@ -1,8 +1,11 @@
+import allure
 import pytest
 
 from base import get_token, get_network_info
 
 
+@allure.feature('Neutron')
+@allure.story('Negative retrieving network')
 def test_negative_get_network():
     try:
         token = get_token()

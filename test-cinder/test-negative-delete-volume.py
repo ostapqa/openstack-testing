@@ -1,8 +1,11 @@
+import allure
 import pytest
 
 from base import delete_volume, get_token
 
 
+@allure.feature('Cinder')
+@allure.story('Negative delete Volume')
 def test_delete_volume():
     try:
         token = get_token()
