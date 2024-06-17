@@ -1,0 +1,4 @@
+allure-pytest==2.13.5
+pytest==8.2.2
+configparser
+requests==2.25.1

@@ -3,3 +3,5 @@ config.ini
 __pycache__
 .idea
 allure-results
+*.pyc
+__pycache__/
