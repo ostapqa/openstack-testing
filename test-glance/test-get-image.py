@@ -1,11 +1,6 @@
 import pytest
-from base import get_token, get_image_info
-import configparser
+from base import get_token, get_image_info, image_id
 
-config = configparser.ConfigParser()
-config.read("/home/ostap/PycharmProjects/openstack-testing/config.ini")
-
-image_id = config.get('compute', 'image')
 
 def test_get_image_info():
     try:
