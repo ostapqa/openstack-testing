@@ -1,5 +1,3 @@
-import time
-
 import requests
 import configparser
 
@@ -13,6 +11,8 @@ password = config.get('openstack', 'password')
 domain_id = config.get('openstack', 'domain_id')
 project_id = config.get('openstack', 'project_id')
 project_name = config.get('openstack', 'project_name')
+flavor_id = config.get('compute', 'flavor')
+network_id = config.get('compute', 'network')
 image_id = config.get('compute', 'image')
 glance_url = config.get('openstack', 'glance_url')
 user_domain_name = config.get('openstack', 'user_domain_name')

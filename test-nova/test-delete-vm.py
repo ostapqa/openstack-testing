@@ -1,17 +1,10 @@
 import pytest
-from base import create_server, get_token, delete_server_by_name
-import configparser
-
-config = configparser.ConfigParser()
-config.read("/home/ostap/PycharmProjects/openstack-testing/config.ini")
-
+from base import (get_token, create_server, image_id, flavor_id,
+                  network_id, delete_server_by_name)
 
 def test_delete_server():
     try:
         token = get_token()
-        image_id = config.get('compute', 'image')
-        flavor_id = config.get('compute', 'flavor')
-        network_id = config.get('compute', 'network')
         server_name = 'test-server'
 
         server = create_server(token, server_name, image_id, flavor_id, network_id)

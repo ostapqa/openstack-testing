@@ -1,5 +1,5 @@
 import pytest
-from base import get_token, create_network, get_network_info, delete_network
+from base import get_token, delete_network
 
 
 def test_delete_network():

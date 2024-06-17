@@ -1,9 +1,6 @@
 import pytest
-from base import get_token, update_server_properties, create_server
-import configparser
-
-config = configparser.ConfigParser()
-config.read("/home/ostap/PycharmProjects/openstack-testing/config.ini")
+from base import (get_token, create_server, image_id, flavor_id,
+                  network_id, update_server_properties)
 
 def test_negative_update_server_properties():
     try:
@@ -11,9 +8,6 @@ def test_negative_update_server_properties():
         new_server_name = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
         server_name = "test-server"
-        image_id = config.get('compute', 'image')
-        flavor_id = config.get('compute', 'flavor')
-        network_id = config.get('compute', 'network')
 
         create_response = create_server(token, server_name, image_id, flavor_id, network_id)
         assert create_response.status_code == 202

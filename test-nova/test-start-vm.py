@@ -1,19 +1,14 @@
+import pytest
 import time
 
-import pytest
-from base import get_token, get_server_status, startup_server, shutdown_server, create_server, delete_server
-import configparser
+from base import (get_token, create_server, delete_server, image_id, flavor_id,
+                  network_id, shutdown_server, get_server_status, startup_server)
 
-config = configparser.ConfigParser()
-config.read("/home/ostap/PycharmProjects/openstack-testing/config.ini")
 
 def test_startup_server():
     try:
         token = get_token()
         server_name = "test-server"
-        image_id = config.get('compute', 'image')
-        flavor_id = config.get('compute', 'flavor')
-        network_id = config.get('compute', 'network')
 
         create_response = create_server(token, server_name, image_id, flavor_id, network_id)
         assert create_response.status_code == 202
