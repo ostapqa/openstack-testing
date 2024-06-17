@@ -386,3 +386,17 @@ def get_network_list(token):
         return response.json()
     else:
         raise Exception(f"Failed to get network list. Status code: {response.status_code}, Response: {response.text}")
+
+
+def update_network(token, network_id, new_properties):
+    url = f"{neutron_url}/networks/{network_id}"
+    headers = {
+        "Content-Type": "application/json",
+        "X-Auth-Token": token
+    }
+    payload = {
+        "network": new_properties
+    }
+
+    response = requests.put(url, json=payload, headers=headers)
+    return response
