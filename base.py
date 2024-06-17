@@ -19,6 +19,7 @@ project_domain_id = config.get('openstack', 'project_domain_id')
 
 nova_url = config.get('compute', 'nova_url')
 cinder_url = config.get('compute', 'cinder_url')
+neutron_url = config.get('compute', 'neutron_url')
 
 def get_token():
     url = f"{auth_url}/auth/tokens"
@@ -334,3 +335,39 @@ def update_volume(token, volume_id, new_name):
     }
     response = requests.put(url, json=payload, headers=headers, verify=False)
     return response
+
+
+# neutron
+def create_network(token, network_name):
+    url = f"{neutron_url}/networks"
+    headers = {
+        "Content-Type": "application/json",
+        "X-Auth-Token": token
+    }
+    payload = {
+        "network": {
+            "name": network_name,
+            "admin_state_up": True
+        }
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    return response
+
+
+def get_network_info(token, network_id):
+    url = f"{neutron_url}/networks/{network_id}"
+    headers = {
+        "Content-Type": "application/json",
+        "X-Auth-Token": token
+    }
+    return requests.get(url, headers=headers)
+
+
+def delete_network(token, network_id):
+    url = f"{neutron_url}/networks/{network_id}"
+    headers = {
+        "Content-Type": "application/json",
+        "X-Auth-Token": token
+    }
+    return requests.delete(url, headers=headers)
