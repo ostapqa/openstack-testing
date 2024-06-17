@@ -375,7 +375,7 @@ def delete_network(token, network_id):
     return requests.delete(url, headers=headers)
 
 
-def get_network_list(token):
+def get_network_list(token, negative=False):
     url = f"{neutron_url}/networks"
     headers = {
         "X-Auth-Token": token,
@@ -384,9 +384,8 @@ def get_network_list(token):
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         return response.json()
-    else:
-        raise Exception(f"Failed to get network list. Status code: {response.status_code}, Response: {response.text}")
-
+    elif negative:
+        return response
 
 def update_network(token, network_id, new_properties):
     url = f"{neutron_url}/networks/{network_id}"
